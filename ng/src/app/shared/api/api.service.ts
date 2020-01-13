@@ -1,3 +1,5 @@
+// tslint:disable: no-use-before-declare
+// tslint:disable: deprecation
 import { Injectable } from '@angular/core';
 import { Observable, Subject } from 'rxjs';
 import { Http, Response, Headers, RequestOptions } from '@angular/http';
@@ -17,11 +19,11 @@ export class ApiService {
   }
 
   private executeResponse(method: Method, url: string, values: any, subject = new Subject<any>()): Observable<any> {
-    let headers = new Headers();
-    let options = new RequestOptions({ headers: headers });
+    const headers = new Headers();
+    const options = new RequestOptions({ headers: headers });
     let response: Observable<Response>;
-    
-    switch(method) {
+
+    switch (method) {
       case Method.Get:
         response = this._http.get(this.url(url) + values, options);
         break;
@@ -37,23 +39,22 @@ export class ApiService {
         response = this._http.put(this.url(url), JSON.stringify(values), options);
         break;
       case Method.Delete:
-        response = this._http.delete(this.url(url) + values, options)
+        response = this._http.delete(this.url(url) + values, options);
         break;
     }
 
     response.pipe(
       map(result => {
         if (result) {
-          if (result.status == 200) {
+          if (result.status === 200) {
             return result.json();
           }
         }
       }),
       catchError(error => {
-        if (error.status == 401) {
+        if (error.status === 401) {
           return of([]);
-        }
-        else {
+        } else {
           console.log(error);
           return (null);
         }
@@ -64,8 +65,9 @@ export class ApiService {
 
   getRequest(url: string, values?: { [id: string]: string }): Observable<any> {
     let params = '';
-    if (values)
+    if (values) {
       params = '?' + this.encodeParams(values);
+    }
     return this.executeResponse(Method.Get, url, params);
   }
 
@@ -73,12 +75,14 @@ export class ApiService {
     return this.executeResponse(Method.Post, url, values);
   }
 
-  pathRequest(url: string, value: string, params: { [id: string]: string } = undefined): Observable<any> {
+  pathRequest(url: string, value: string, params?: { [id: string]: string }): Observable<any> {
     let query = '';
-    if (value)
+    if (value) {
       query = '/' + value;
-    if (params)
+    }
+    if (params) {
       query += '?' + this.encodeParams(params);
+    }
     return this.executeResponse(Method.Path, url, query);
   }
 
@@ -88,14 +92,15 @@ export class ApiService {
 
   deleteRequest(url: string, value: string) {
     let param = '';
-    if (value)
+    if (value) {
       param = '/' + value;
+    }
     return this.executeResponse(Method.Delete, url, param);
   }
 
   encodeParams(values: { [id: string]: string }): string {
     return (Object.keys(values).map((k) => {
-      return `${k}=${values[k].replace(new RegExp('&', 'g'), "%26")}`;
+      return `${k}=${values[k].replace(new RegExp('&', 'g'), '%26')}`;
     }).join('&'));
   }
 }

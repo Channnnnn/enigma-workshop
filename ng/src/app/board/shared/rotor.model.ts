@@ -6,7 +6,7 @@ export class Rotor {
     id: string;
     ticks: number;
     state: number;
-    steps: number = 0;
+    steps = 0;
 
     constructor(attrs?: {
         id: string,
@@ -17,7 +17,7 @@ export class Rotor {
             Object.assign(this, attrs);
             this.steps = this.state;
             this._initialState = this.state;
-        };
+        }
     }
 
     get isUnlock(): boolean {
@@ -26,7 +26,7 @@ export class Rotor {
 
     rotate() {
         this.steps += this.STEP;
-        this.state = this.steps%this.ticks;
+        this.state = this.steps % this.ticks;
     }
 
     reset() {

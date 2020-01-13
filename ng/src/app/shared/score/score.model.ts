@@ -7,6 +7,6 @@ export class Score {
         player: string,
         score: number
     }) {
-        if (attrs) Object.assign(this, attrs);
+        if (attrs) { Object.assign(this, attrs); }
     }
 }

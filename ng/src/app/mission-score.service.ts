@@ -6,11 +6,11 @@ import { ReplaySubject } from 'rxjs';
 })
 export class MissionScoreService {
   $level = new ReplaySubject<number>();
-  
-  level: number = 0;
-  time: number = 0;
-  steps: number = 0;
-  answer: number = 0;
+
+  level = 0;
+  time = 0;
+  steps = 0;
+  answer = 0;
 
   constructor() { }
 }

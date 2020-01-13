@@ -15,7 +15,7 @@ export class MissionService {
     mission: {
       list(level: string): Observable<Mission[]>
     }
-  }
+  };
 
   constructor(private _apiService: ApiService) {
     this.get = {
@@ -24,20 +24,20 @@ export class MissionService {
           return this._apiService.pathRequest('/mission', level)
             .pipe(
               map(results => {
-                let missions: Mission[] = [];
-                for (let mission of <any[]>results) {
-                  let rotors: { [id: string]: Rotor } = {};
+                const missions: Mission[] = [];
+                for (const mission of <any[]>results) {
+                  const rotors: { [id: string]: Rotor } = {};
                   mission.rotors.map(r => {
                     return new Rotor({
                       id: r.id,
                       ticks: r.ticks,
                       state: r.state
-                    })
+                    });
                   }).forEach(r => {
                     rotors[r.id] = r;
                   });
 
-                  let circuits: { [id: string]: Circuit } = {};
+                  const circuits: { [id: string]: Circuit } = {};
                   mission.circuits.map(c => {
                     return new Circuit({
                       dial: rotors[c.switch],
@@ -48,7 +48,7 @@ export class MissionService {
                         .map(r => {
                         return rotors[r];
                       })
-                    })
+                    });
                   }).forEach(c => {
                     circuits[c.dial.id] = c;
                   });
@@ -56,19 +56,19 @@ export class MissionService {
                     new Mission({
                       major: mission.major,
                       minor: mission.minor,
-                      cover: "",
+                      cover: '',
                       layout: mission.layout,
                       rotors: rotors,
                       circuits: circuits,
                       answer: mission.answer
                     })
-                  )
+                  );
                 }
                 return missions;
               })
             );
         }
       }
-    }
+    };
   }
 }

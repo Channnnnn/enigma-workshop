@@ -1,5 +1,5 @@
-import { Circuit } from "./circuit.model";
-import { Rotor } from "./rotor.model";
+import { Circuit } from './circuit.model';
+import { Rotor } from './rotor.model';
 
 export enum Symbol {
     Reset = 0,
@@ -26,7 +26,7 @@ export class Mission {
         circuits: { [id: string]: Circuit },
         answer: number
     }) {
-        if (attrs) Object.assign(this, attrs);
+        if (attrs) { Object.assign(this, attrs); }
     }
 
     get unlocked() {
@@ -34,7 +34,7 @@ export class Mission {
     }
 
     dial(id: string) {
-        let circuit = this.circuits[id];
+        const circuit = this.circuits[id];
         circuit.dial.rotate();
         circuit.rotors.forEach(r => { r.rotate(); });
     }

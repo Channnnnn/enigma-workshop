@@ -1,4 +1,4 @@
-import { Rotor } from "./rotor.model";
+import { Rotor } from './rotor.model';
 
 export class Circuit {
     dial: Rotor;
@@ -8,6 +8,6 @@ export class Circuit {
         dial: Rotor,
         rotors: Rotor[]
     }) {
-        if (attrs) Object.assign(this, attrs);
+        if (attrs) { Object.assign(this, attrs); }
     }
 }

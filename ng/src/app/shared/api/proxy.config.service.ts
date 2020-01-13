@@ -1,3 +1,4 @@
+// tslint:disable: deprecation
 import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 
@@ -9,7 +10,7 @@ import { map } from 'rxjs/operators';
 export class ProxyConfigService {
   api: {
     url: string
-  }
+  };
 
   constructor(private _http: Http) { }
 
@@ -20,7 +21,7 @@ export class ProxyConfigService {
         .subscribe((config) => {
           this.api = {
             url: config.api.url
-          }
+          };
           resolve(true);
         });
     });

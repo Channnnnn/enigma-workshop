@@ -1,4 +1,4 @@
-import { ScoreService } from './../shared/score/score.service';
+import { ScoreService } from '../shared/score/score.service';
 import { Component, OnInit } from '@angular/core';
 import { faTrophy } from '@fortawesome/free-solid-svg-icons';
 import { Score } from '../shared/score/score.model';
@@ -13,13 +13,13 @@ import { Router } from '@angular/router';
 export class RankingComponent implements OnInit {
   private _scores: { [id: string]: Score } = {};
 
-  faTrophy = faTrophy
+  faTrophy = faTrophy;
 
   get scores(): Score[] {
-    return Object.keys(this._scores).map(k => { return this._scores[k]; }).sort((a, b) => b.score - a.score );
+    return Object.keys(this._scores).map(k => this._scores[k]).sort((a, b) => b.score - a.score );
   }
   get ranking(): number {
-    return this.scores.findIndex(s => s.player === localStorage.getItem("player")) + 1;
+    return this.scores.findIndex(s => s.player === localStorage.getItem('player')) + 1;
   }
 
   constructor(
@@ -37,8 +37,9 @@ export class RankingComponent implements OnInit {
 
   onContinue() {
     let level = this._missionScoreService.level;
-    if(level === undefined)
+    if (level === undefined) {
       level = 1;
+    }
     this._router.navigate(['/mission', level]);
   }
 

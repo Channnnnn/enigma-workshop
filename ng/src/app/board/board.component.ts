@@ -1,5 +1,5 @@
 import { MissionService } from './shared/mission.service';
-import { MissionScoreService } from './../mission-score.service';
+import { MissionScoreService } from '../mission-score.service';
 import { Mission, Symbol } from './shared/mission.model';
 import { Circuit } from './shared/circuit.model';
 import { Component, OnInit } from '@angular/core';
@@ -12,14 +12,14 @@ import { Router, ActivatedRoute } from '@angular/router';
   styleUrls: ['./board.component.css']
 })
 export class BoardComponent implements OnInit {
-  private _level: number = 1;
+  private _level = 1;
   private _missions: Mission[] = [];
   private _completes: Mission[] = [];
 
   mission: Mission = new Mission({
     major: 0,
     minor: 0,
-    cover: "",
+    cover: '',
     layout: [],
     rotors: {},
     circuits: {},
@@ -44,19 +44,19 @@ export class BoardComponent implements OnInit {
     private _activatedRoute: ActivatedRoute,
     private _missionScoreService: MissionScoreService,
     private _missionService: MissionService) {
-    let tutorialRoters = {
-      "R111": new Rotor({
-        id: "R111",
+    const tutorialRoters = {
+      'R111': new Rotor({
+        id: 'R111',
         ticks: 2,
         state: 1
       }),
-      "R121": new Rotor({
-        id: "R121",
+      'R121': new Rotor({
+        id: 'R121',
         ticks: 2,
         state: 1
       }),
-      "R122": new Rotor({
-        id: "R122",
+      'R122': new Rotor({
+        id: 'R122',
         ticks: 2,
         state: 0
       })
@@ -65,16 +65,16 @@ export class BoardComponent implements OnInit {
       new Mission({
         major: 1,
         minor: 1,
-        cover: "touch rotor to make it green",
+        cover: 'touch rotor to make it green',
         layout: [
-          ["R111"]
+          ['R111']
         ],
         rotors: {
-          "R111": tutorialRoters["R111"]
+          'R111': tutorialRoters['R111']
         },
         circuits: {
-          "R111": new Circuit({
-            dial: tutorialRoters["R111"],
+          'R111': new Circuit({
+            dial: tutorialRoters['R111'],
             rotors: []
           })
         },
@@ -83,24 +83,24 @@ export class BoardComponent implements OnInit {
       new Mission({
         major: 1,
         minor: 2,
-        cover: "make rotors green",
+        cover: 'make rotors green',
         layout: [
-          ["R121"],
-          ["R122"]
+          ['R121'],
+          ['R122']
         ],
         rotors: {
-          "R121": tutorialRoters["R121"],
-          "R122": tutorialRoters["R122"]
+          'R121': tutorialRoters['R121'],
+          'R122': tutorialRoters['R122']
         },
         circuits: {
-          "R121": new Circuit({
-            dial: tutorialRoters["R121"],
+          'R121': new Circuit({
+            dial: tutorialRoters['R121'],
             rotors: [
-              tutorialRoters["R122"]
+              tutorialRoters['R122']
             ]
           }),
-          "R122": new Circuit({
-            dial: tutorialRoters["R122"],
+          'R122': new Circuit({
+            dial: tutorialRoters['R122'],
             rotors: []
           })
         },
@@ -111,21 +111,24 @@ export class BoardComponent implements OnInit {
 
   ngOnInit() {
     this._activatedRoute.paramMap.subscribe(params => {
-      let level = parseInt(params.get("level"));
-      if (isNaN(level))
+      let level = parseInt(params.get('level'), 10);
+      if (isNaN(level)) {
         level = 1;
+      }
       this._level = level;
       this._missionService.get.mission.list(this._level.toString()).subscribe(missions => {
-        if (this._level === 1)
+        if (this._level === 1) {
           missions = missions.slice(2);
-        else if(this._level > 1)
+        } else if (this._level > 1) {
           this._missions = [];
+             }
         this._missions = this._missions.concat(missions).reverse();
         this.start(this._missions.pop());
       });
-    })
+    });
   }
 
+  // tslint:disable-next-line: use-life-cycle-interface
   ngOnDestroy() {
   }
 
@@ -134,23 +137,24 @@ export class BoardComponent implements OnInit {
     this.cover = mission.cover;
     this.positions = [];
     this.steps = [];
-    if (this.started === undefined && ((this._level == 1 && this._completes.length == 2) || this._level > 1))
+    if (this.started === undefined && ((this._level === 1 && this._completes.length === 2) || this._level > 1)) {
       this.started = new Date().getTime();
+    }
 
-    let rows = this.mission.layout.length;
-    let columns = this.mission.layout[0].length;
-    let margin = 100;
+    const rows = this.mission.layout.length;
+    const columns = this.mission.layout[0].length;
+    const margin = 100;
 
-    let dimension = {
+    const dimension = {
       width: margin * columns,
       height: margin * rows
     };
-    let start_point = {
+    const start_point = {
       x: (window.innerWidth - (dimension.width)) / 2,
       y: (window.innerHeight - (dimension.height)) / 2
     };
-    for (var i = 0; i < rows; i++) {
-      for (var j = 0; j < columns; j++) {
+    for (let i = 0; i < rows; i++) {
+      for (let j = 0; j < columns; j++) {
         if (this.mission.layout[i][j] !== null) {
           this.positions.push({
             y: start_point.y + (i * margin),
@@ -174,8 +178,7 @@ export class BoardComponent implements OnInit {
           this._missionScoreService.steps = this._completes.map(m => m.steps.length).reduce((sum, current) => sum + current, 0);
           this._missionScoreService.answer = this._completes.map(m => m.answer).reduce((sum, current) => sum + current, 0);
           this._router.navigate(['/score']);
-        }
-        else {
+        } else {
           this.start(this._missions.pop());
         }
       }, 1000);
@@ -185,7 +188,7 @@ export class BoardComponent implements OnInit {
   onReset() {
     this.steps = [];
     this.symbol = Symbol.Reset;
-    this.cover = "reset";
+    this.cover = 'reset';
 
     this.mission.reset();
   }
