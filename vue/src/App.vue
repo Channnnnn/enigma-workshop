@@ -1,27 +1,33 @@
 <template>
   <div id="app">
-    <BoardComponent/>
+    <GameBoard/>
   </div>
 </template>
 
 <script>
-import BoardComponent from './components/BoardComponent.vue'
+import GameBoard from './components/GameBoard.vue'
 
 export default {
   name: 'app',
   components: {
-    BoardComponent
+    GameBoard
   }
 }
 </script>
 
 <style>
+*, ::before, ::after {
+  box-sizing: border-box;
+}
+body {
+  margin: 0;
+  padding: 0;
+}
 #app {
   font-family: 'Avenir', Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
   color: #2c3e50;
-  margin-top: 60px;
 }
 </style>
