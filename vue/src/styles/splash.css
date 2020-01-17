@@ -1,0 +1,16 @@
+.splash {
+  color: #fff;
+}
+.splash i.fa {
+  font-size: 3em;
+}
+.btn-close {
+  cursor: pointer;
+  min-width: 200px;
+  font-size: 1.75em;
+  padding: 0.25em;
+  color: #fff;
+  background-color: transparent;
+  border: 3px solid #fff;
+  border-radius: 4px;
+}

@@ -1,0 +1,22 @@
+.score .header {
+  color: #BBB;
+  position: fixed;
+  top: 0;
+  user-select: none;
+}
+.score .score-group {
+  margin-bottom: 24px;
+  color: white;
+  user-select: none;
+}
+.score .score-group h1, .score .score-group h2 {
+  margin: 0.25rem 0;
+}
+.score .score-group i.fa {
+  font-size: 1.25em;
+  margin-bottom: 0.25em;
+}
+
+.fixed-position {
+  position: fixed;
+}
