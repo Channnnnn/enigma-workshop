@@ -1,0 +1,27 @@
+.control {
+  display: flex;
+  align-items: center;
+  justify-content: space-around;
+}
+.control .timer, .control .steps {
+  font-size: 2em;
+}
+.control .reset {
+  border: none;
+  flex-shrink: 0;
+  width: 80px;
+  height: 80px;
+  background-color: #00bfff;
+  border-radius: 50%;
+  font-size: 2em;
+  color: white;
+  transition: all 0.3s ease;
+}
+.control .reset:hover {
+  box-shadow: 0 0 0 6px #00bfff66;
+  background-color: #008ab8;
+}
+.control .reset:focus {
+  outline: none;
+  box-shadow: 0 0 0 6px #83e0ff66;
+}

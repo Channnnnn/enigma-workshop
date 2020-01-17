@@ -5,7 +5,7 @@
       <h3>{{title}}</h3>
       <button class="btn-close"
       v-if="!icon"
-      @click="$emit('dismiss')">Go</button>
+      @click="dismiss">Go</button>
     </div>
   </div>
 </template>
@@ -19,49 +19,52 @@ export default {
   },
   data() {
     return {
-      timer: null
+      timer: null,
+      visible: false
     }
   },
   computed: {
+    /* visible if not score or rank, and not dismissed, else hidden */
     visibility() {
-      return this.splash ? '' : 'hidden';
+      return !['_score', '_rank'].includes(this.splash) && this.visible ? '' : 'hidden';
     },
+    /* set visible, map splash */
     title() {
+      this.setVisible();
       return Symbol[this.splash] || this.splash;
     },
+    /* if title is keyword with _ skip, map title to icon */
     icon() {
-      if (this.splash === Symbol._reset) return 'fa-undo-alt';
-      else if (this.splash === Symbol._nice) return 'fa-thumbs-up';
-      else if (this.splash === Symbol._excellent) return 'fa-medal';
+      if (this.title[0] === '_') return '';
+      if (this.title === Symbol._reset) return 'fa-undo-alt';
+      else if (this.title === Symbol._nice) return 'fa-thumbs-up';
+      else if (this.title === Symbol._excellent) return 'fa-medal';
       else return '';
     }
   },
   watch: {
+    /* icon is changed, reset timer, if has icon set timeout 700ms*/
     icon(val) {
       clearTimeout(this.timer);
       if (val) {
         this.timer = setTimeout(() => { this.dismiss() }, 700);
       }
     }
+  },
+  methods: {
+    /* set visible if splash is empty  */
+    setVisible() {
+      this.visible = this.splash !== '';
+    },
+    /* emit dismiss & hise */
+    dismiss() {
+      this.$emit('dismiss');
+      this.visible = false;
+    }
   }
 }
 </script>
 
 <style>
-.splash {
-  color: #fff;
-}
-.splash i.fa {
-  font-size: 3em;
-}
-.btn-close {
-  cursor: pointer;
-  min-width: 200px;
-  font-size: 1.75em;
-  padding: 0.25em;
-  color: #fff;
-  background-color: transparent;
-  border: 3px solid #fff;
-  border-radius: 4px;
-}
+@import '../styles/splash.css';
 </style>

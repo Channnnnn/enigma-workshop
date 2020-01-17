@@ -1,11 +1,9 @@
 <template>
   <div class="board">
-    <SplashComponent
-    :splash="splash"
-    @dismiss="onDismiss"/>
-    <ScoreComponent v-bind="missionScore" :splash="splash" @nextmission="onNextMission" @rank="onRanking"/>
-    <RankComponent :scores="rankingScore" :splash="splash" @nextmission="onNextMission"/>
-    <header>Mission {{mission.major}}-{{mission.minor}}</header>
+    <SplashComponent :splash="splash" @dismiss="onDismiss"/>
+    <!-- <ScoreComponent v-bind="missionScore" :splash="splash" @nextmission="onNextMission" @rank="onRanking"/>
+    <RankComponent :scores="rankingScore" :splash="splash" @nextmission="onNextMission"/> -->
+    <div class="mission">Mission {{mission.major}}-{{mission.minor}}</div>
     <div class="rotor-container">
       <RotorComponent 
       v-for="(rotor, i) in rotors" 
@@ -14,9 +12,9 @@
       :style="'left:'+positions[i].x+'px;top:'+positions[i].y+'px;'" 
       @dial="onDial"/>
     </div>
-    <footer>
-
-    </footer>
+    <div class="control-container">
+      <ControlComponent :steps="steps.length" @resetgame="onReset" ref="controlRef"/>
+    </div>
   </div>
 </template>
 
@@ -25,26 +23,28 @@ import RotorComponent from "./Rotor";
 import SplashComponent from "./Splash";
 import ScoreComponent from "./Score";
 import RankComponent from "./Rank";
+import ControlComponent from "./Control";
 import { tutorialMissions, Mission, Symbol } from '../models/mission';
-import * as enigmaApi from '../scripts/enigma.api'; 
+import * as enigmaApi from '../lib/enigma.api'; 
+import { scoreSummary } from '../lib/missionManager';
 export default {
   name: 'Board',
   components: {
     RotorComponent,
     SplashComponent,
     ScoreComponent,
-    RankComponent
+    RankComponent,
+    ControlComponent
   },
   data() {
     return {
-      splash: '',
+      splash: '', /* menu indicator */
       level: 1,
       missions: tutorialMissions,
-      completed: [],
+      completed: [], /* for score submission */
 
       mission: new Mission({major: 0, minor: 0, cover: '', answer: 0, layout: [], rotors: {}, circuits: {}}),
-      positions: [],
-      started: undefined,
+      positions: [], /* for rotors */
       steps: [],
       missionScore: null,
       rankingScore: []
@@ -60,28 +60,30 @@ export default {
   },
   watch: {
     unlocked(val) {
+      /* if unlocked write step to mission then push to completed mission */
       if (val) {
         this.mission.steps = this.steps;
         this.completed.push(this.mission);
+        if (this.steps.length > this.mission.answer) {
+          this.splash = '_nice'
+        } else {
+          this.splash = '_excellent'
+        }
         setTimeout(async () => {
           if (this.missions.length === 0) {
-            this.missionScore = {
-              level: this.level,
-              time: +new Date() - this.started,
-              steps: this.completed.map(m => m.steps.length).reduce((sum, current) => sum+current, 0),
-              answer: this.completed.map(m => m.answer).reduce((sum, current) => sum+current, 0)
-            }
+            this.missionScore = scoreSummary(this.level, this.$refs.controlRef.elapsed, this.completed);
             this.splash = '_score';
+            this.$refs.controlRef.clearTick();
           } else {
-            if (this.steps.length > this.mission.answer) {
-              this.splash = '_nice'
-            } else {
-              this.splash = '_excellent'
-            }
             this.symbol = Symbol[this.splash];
             this.start(this.missions.shift());
           }
         }, 1000);
+      }
+    },
+    splash(val) {
+      if (val) {
+        this.$refs.controlRef.clearTick();
       }
     }
   },
@@ -91,21 +93,18 @@ export default {
       this.splash = mission.cover;
       this.positions = [];
       this.steps = [];
-      if (this.started === undefined && ((this.level === 1 && this.completed.length === 2) || this.level > 1)) {
-        this.started = +new Date();
-      }
-
       const rows = this.mission.layout.length;
       const columns = this.mission.layout[0].length;
       const margin = 100;
 
       const width = columns * margin;
+      const height = (3-rows) * margin;
 
       for (let i = 0; i < rows; i++) {
         for (let j = 0; j < columns; j++) {
           if (this.mission.layout[i][j] !== null) {
             this.positions.push({
-              y: i * margin,
+              y: (height/2) + (i * margin),
               x: (-width/2) + (j * margin)
             });
           }
@@ -117,7 +116,7 @@ export default {
       this.steps.push(id);
     },
     onDismiss() {
-      this.splash = '';
+      this.$refs.controlRef.startTick();
     },
     onReset() {
       this.steps = [];
@@ -130,20 +129,19 @@ export default {
       this.splash = '_rank';
     },
     async onNextMission() {
-      this.missions = await enigmaApi.getMission(this.level++);
+      this.missions = await enigmaApi.getMission(++this.level);
+      this.$refs.controlRef.startTick();
       this.start(this.missions.shift());
-      this.splash = '_ready';
     }
   },
   async created() {
-    let missions = await enigmaApi.getMission(this.level);
-    if (this.level === 1) {
-      missions = missions.slice(2);
-    } else if (this.level > 1) {
-      this.missions = [];
-    }
-    this.level++;
-    this.missions = this.missions.concat(missions);
+    // let missions = await enigmaApi.getMission(this.level);
+    // if (this.level === 1) {
+    //   missions = missions.slice(2);
+    // } else if (this.level > 1) {
+    //   this.missions = [];
+    // }
+    this.missions = this.missions.concat(/* missions */[]);
     this.start(this.missions.shift());
   }
 }
@@ -153,25 +151,23 @@ export default {
 .board {
   height: 100%;
 }
+.board > .mission{
+  font-size: 2em;
+  color: #888;
+  margin-top: 1rem;
+  position: fixed;
+  width: 100%;
+}
 .rotor-container {
-  transform: translate(50vw, 35vh);
+  transform: translate(50vw, 30vh);
   width: fit-content;
 }
-.splash-wrapper{
-  position: absolute;
+.control-container{
+  position: fixed;
+  bottom: 0;
   width: 100%;
-  height: 100%;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-  z-index: 10;
-  background-color: #012D;
-  opacity: 1;
-  overflow: hidden;
-  transition: all 0.3s ease;
+  padding: 1.5em;
 }
-.hidden {
-  opacity: 0;
-  pointer-events: none;
-}
+
+@import '../styles/splash-wrapper.css';
 </style>

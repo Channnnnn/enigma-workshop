@@ -2,22 +2,23 @@
   <div class="control">
     <div class="timer">
       <i class="fa fa-stopwatch"></i>
-      <div>{{timer}}</div>
+      <div>{{timer}}<!-- get timer --></div>
     </div>
-    <button @click="$emit('reset')"><i class="fa fa-undo-alt"></i></button>
+    <!-- Reset button hook with undo-alt icon -->
+    <button class="reset" @click="$emit('resetgame')"><i class="fa fa-undo-alt"></i></button>
     <div class="steps">
       <i class="fa fa-shoe-prints"></i>
-      <div>{{steps}}</div>
+      <div>{{steps}}<!-- steps --></div>
     </div>
   </div>
 </template>
 
 <script>
-import { formatTimer } from '../scripts/timer';
+import { formatTimer } from '../lib/timer';
 export default {
   name: 'control',
   props: {
-    started: Number 
+    steps: Number
   },
   data() {
     return {
@@ -25,23 +26,24 @@ export default {
       intervalId: undefined
     }
   },
-  watch: {
-    started(value) {
-      if (value && this.intervalId === undefined) {
-        this.intervalId = setInterval(() => {
-          this.elapsed += 1000
-        }, 1000);
-      }
-    }
-  },
   computed: {
     timer() {
-      return formatTimer(+new Date() - this.started);
+      return formatTimer(this.elapsed);
     }
   },
+  methods: {
+    startTick() {
+      this.intervalId = setInterval(() => {
+        this.elapsed += 1000
+      }, 1000);
+    },
+    clearTick() {
+      clearInterval(this.intervalId);
+    }
+  }
 }
 </script>
 
 <style>
-
+@import '../styles/control.css';
 </style>

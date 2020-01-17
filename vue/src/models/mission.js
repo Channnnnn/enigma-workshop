@@ -6,8 +6,7 @@ export const Symbol = {
   _nice: 'Nice',
   _excellent: 'Excellent',
   _score: 'Score',
-  _rank: 'Rank',
-  _ready: 'Ready'
+  _rank: 'Rank'
 }
 
 export class Mission {

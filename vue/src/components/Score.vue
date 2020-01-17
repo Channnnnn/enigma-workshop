@@ -25,8 +25,8 @@
 </template>
 
 <script>
-import { formatTimer } from '../scripts/timer';
-import * as enigmaApi from '../scripts/enigma.api';
+import { formatTimer } from '../lib/timer';
+import * as enigmaApi from '../lib/enigma.api';
 export default {
   name: 'score',
   props: {
@@ -38,7 +38,7 @@ export default {
   },
   computed: {
     visibility() {
-      return this.splash === 'score' ? '' : 'hidden';
+      return this.splash === '_score' ? '' : 'hidden';
     },
     duration() {
       return formatTimer(this.time);
@@ -85,70 +85,6 @@ export default {
 </script>
 
 <style>
-.flex-column {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.score .header {
-  color: #BBB;
-  position: fixed;
-  top: 0;
-  user-select: none;
-}
-.score .score-group {
-  margin-bottom: 24px;
-  color: white;
-  user-select: none;
-}
-.score .score-group h1, .score .score-group h2 {
-  margin: 0.25rem 0;
-}
-.score .score-group i.fa {
-  font-size: 1.25em;
-  margin-bottom: 0.25em;
-}
-
-.fixed-position {
-  position: fixed;
-}
-
-/* navigate.css */
-.navigate {
-  bottom: 0;
-  padding: 1rem;
-  width: 100%;
-  align-items: unset;
-}
-.navigate .btn {
-  padding: 0.5rem;
-  font-size: 1.17rem;
-  border-radius: 4px;
-  border: none;
-  transition: box-shadow 0.1s ease, all 0.3s ease;
-  color: white;
-  user-select: none;
-}
-.btn-submit {
-  background-color: #73af3a;
-  margin-bottom: 0.5rem;
-}
-.btn-submit:hover {
-  background-color: #72af3a99;
-}
-.btn-submit:focus {
-  outline: none;
-  box-shadow: #a1e265 0 0 0 2px ;
-}
-.btn-continue {
-  background-color: #23a0da;
-}
-.btn-continue:hover {
-  background-color: #23a0da99;
-}
-.btn-continue:focus {
-  outline: none;
-  box-shadow: #53c3f7 0 0 0 2px;
-}
+@import '../styles/score.css';
+@import '../styles/navigate.css';
 </style>

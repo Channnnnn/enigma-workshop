@@ -1,0 +1,26 @@
+.ranking {
+  color: white;
+  width: 100%;
+  align-items: stretch;
+  height: calc(100vh - 4rem)
+}
+.rank-group {
+  color: goldenrod;
+}
+.rank-table {
+  overflow: auto;
+}
+.rank-table table {
+  width: 100%;
+  border-spacing: 0;
+}
+.rank-table tr {
+  height: 2em;
+}
+.rank-table tbody tr:nth-child(odd) {
+  background-color: #fff2;
+}
+.rank-table tr, .rank-table th {
+  border-top: 1px solid #ddd2;
+  vertical-align: middle;
+}
