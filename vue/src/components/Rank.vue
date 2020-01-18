@@ -48,7 +48,6 @@ export default {
   computed: {
     ranking() {
       /* Implement rank finder */
-      return 'TODO: Implement rank finder'
       return this.scores.findIndex(s => s.player === localStorage.getItem('player')) + 1;
     },
     visibility() {
@@ -56,7 +55,6 @@ export default {
     },
     suffix() {
       /* Implement cardinal number suffix */
-      return ''
       const suffixes = { 
         1: 'st',
         2: 'nd',
