@@ -43,7 +43,7 @@ export default {
     }
   },
   watch: {
-    /* icon is changed, reset timer, if has icon set timeout 700ms*/
+    /* when icon is changed, reset timer, if has icon set timeout 700ms*/
     icon(val) {
       clearTimeout(this.timer);
       if (val) {

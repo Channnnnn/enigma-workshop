@@ -1,6 +1,7 @@
+const STEP = 1;
+const KEY = 0;
 export class Rotor {
-  STEP = 1;
-  KEY = 0;
+  _initialState;
 
   id;
   ticks;
@@ -11,24 +12,24 @@ export class Rotor {
    * @param {{id: String, ticks: Number, state: Number}} attrs 
    */
   constructor(attrs) {
-      if (attrs) {
-          Object.assign(this, attrs);
-          this.steps = this.state;
-          this._initialState = this.state;
-      }
+    if (attrs) {
+      Object.assign(this, attrs);
+      this.steps = this.state;
+      this._initialState = this.state;
+    }
   }
 
   get isUnlock() {
-      return this.state === this.KEY;
+    return this.state === KEY;
   }
 
   rotate() {
-      this.steps += this.STEP;
-      this.state = this.steps % this.ticks;
+    this.steps += STEP;
+    this.state = this.steps % this.ticks;
   }
 
   reset() {
-      this.state = this._initialState;
-      this.steps = this.state;
+    this.state = this._initialState;
+    this.steps = this.state;
   }
 }
