@@ -1,4 +1,4 @@
-#1) Rotor component
+# 1) Rotor component
 ```
 <!-- div.rotor.vetor  .success:isUnlock -->
   <!-- div.knob click to dial -->
@@ -34,7 +34,7 @@ const ROTOR_SIZE = 86; const TICK_SIZE = 4; const RADIUS = 35;
 ```
 `use onDial() to call (mission model) dial with id and save to steps`
 
-#2) Control component
+# 2) Control component
 ```
 <div class="control">
   <div class="timer">
@@ -59,7 +59,7 @@ const ROTOR_SIZE = 86; const TICK_SIZE = 4; const RADIUS = 35;
 `use onReset() to clear steps & set splash _reset & call mission reset`
 `pass steps length to component, ref this component as controlRef`
 
-#3) Score component
+# 3) Score component
 ```
 <!-- add visibility class -->
 <div class="splash-wrapper flex-column">
@@ -99,11 +99,11 @@ const ROTOR_SIZE = 86; const TICK_SIZE = 4; const RADIUS = 35;
 /* onContinue() emit `nextmission` */
 ```
 
-#4) Ranking component
+# 4) Ranking component
 `Use hint in component file`
 `Create ranking handler`
 
-#5) enigma.api.js
+# 5) enigma.api.js
 ```
 /* use api json value */
 /* request() fetch /api/:path with method */

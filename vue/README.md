@@ -1,11 +1,11 @@
-#Vue enigma
+# Vue enigma
 ```
 > npm i
 > npm run serve
 ```
 Project overview
 
-##Components
+## Components
 ***GameBoard.vue***
 Root component & maintain game states / UI states
   - ***Splash.vue***
@@ -19,7 +19,7 @@ Root component & maintain game states / UI states
   - ***Rank.vue***
     Ranking screen
 
-##Models
+## Models
 ***rotor.js***
 Rotor state and method for interaction
 ***circuit.js***
@@ -27,7 +27,7 @@ Make one rotor turn multiple rotors
 ***mission.js***
 Create level layout and store move step
 
-##Lib
+## Lib
 ***enigma.api.js***
 Connect to game API
 ***scoreSummary.js***
