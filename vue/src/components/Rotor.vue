@@ -1,15 +1,15 @@
 <template>
   <div class="rotor vector" :class="{'success': isUnlock}">
-    <!-- <div class="knob" @click="dial">
+    <div class="knob" @click="dial">
       <div class="ticker" :style="'transform: rotate('+degree+'deg);'">
         <div class="tick"></div>
       </div>
-    </div> -->
-    <!-- <div 
+    </div>
+    <div 
     v-for="(point) in points" 
     :key="JSON.stringify(point)" 
     class="tick-point" 
-    :style="'left:'+point.left+'px; top:'+point.top+'px;'"></div> -->
+    :style="'left:'+point.left+'px; top:'+point.top+'px;'"></div>
   </div>
 </template>
 

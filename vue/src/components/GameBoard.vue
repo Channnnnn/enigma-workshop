@@ -1,8 +1,8 @@
 <template>
   <div class="board">
     <SplashComponent :splash="splash" @dismiss="onDismiss"/>
-    <!-- <ScoreComponent v-bind="missionScore" :splash="splash" @nextmission="onNextMission" @rank="onRanking"/>
-    <RankComponent :scores="rankingScore" :splash="splash" @nextmission="onNextMission"/> -->
+    <ScoreComponent v-bind="missionScore" :splash="splash" @nextmission="onNextMission" @rank="onRanking"/>
+    <RankComponent :scores="rankingScore" :splash="splash" @nextmission="onNextMission"/>
     <div class="mission">Mission {{mission.major}}-{{mission.minor}}</div>
     <div class="rotor-container">
       <RotorComponent 
@@ -135,13 +135,13 @@ export default {
     }
   },
   async created() {
-    // let missions = await enigmaApi.getMission(this.level);
-    // if (this.level === 1) {
-    //   missions = missions.slice(2);
-    // } else if (this.level > 1) {
-    //   this.missions = [];
-    // }
-    this.missions = this.missions.concat(/* missions */[]);
+    let missions = await enigmaApi.getMission(this.level);
+    if (this.level === 1) {
+      missions = missions.slice(2);
+    } else if (this.level > 1) {
+      this.missions = [];
+    }
+    this.missions = this.missions.concat(missions);
     this.start(this.missions.shift());
   }
 }

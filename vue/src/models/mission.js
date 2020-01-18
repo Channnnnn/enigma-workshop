@@ -10,26 +10,26 @@ export const Symbol = {
 }
 
 export class Mission {
-  major/* : number */;
-  minor/* : number */;
-  cover/* : string */;
-  layout/* : string[][] */;
-  rotors/* : { [id: string]: Rotor } */ = {};
-  circuits/* : { [id: string]: Circuit } */ = {};
-  steps/* : string[] */ = [];
-  answer/* : number */;
+  major;/* : number */
+  minor;/* : number */
+  cover;/* : string */
+  layout;/* : string[][] */
+  rotors = {};/* : { [id: string]: Rotor } */
+  circuits = {};/* : { [id: string]: Circuit } */
+  steps = [];/* : string[] */
+  answer;/* : number */
 
-/**
- * 
- * @param {{
-    major: number,
-    minor: number,
-    cover: string,
-    layout: string[][],
-    rotors: { [id: string]: Rotor },
-    circuits: { [id: string]: Circuit },
-    answer: number
-  }} attrs 
+  /**
+   * 
+   * @param {{
+      major: number,
+      minor: number,
+      cover: string,
+      layout: string[][],
+      rotors: { [id: string]: Rotor },
+      circuits: { [id: string]: Circuit },
+      answer: number
+    }} attrs 
   */
   constructor(attrs) {
     if (attrs) { Object.assign(this, attrs); }
