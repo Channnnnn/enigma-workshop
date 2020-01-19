@@ -4,7 +4,7 @@
   <!-- div.knob click to dial -->
     <!-- div.ticker rotate by degree -->
       <!-- div.tick -->
-<!-- div.tick-point per points  offset left+top -->
+  <!-- div.tick-point per points  offset left+top -->
 ```
 ```
 const ROTOR_SIZE = 86; const TICK_SIZE = 4; const RADIUS = 35;

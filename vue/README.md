@@ -20,17 +20,17 @@ Root component & maintain game states / UI states
     Ranking screen
 
 ## Models
-***rotor.js***
-Rotor state and method for interaction
-***circuit.js***
+  - ***rotor.js***
+    Rotor state and method for interaction
+  - ***circuit.js***
 Make one rotor turn multiple rotors
-***mission.js***
+  - ***mission.js***
 Create level layout and store move step
 
 ## Lib
-***enigma.api.js***
+- ***enigma.api.js***
 Connect to game API
-***scoreSummary.js***
+- ***scoreSummary.js***
 Score object
-***timer.js***
+- ***timer.js***
 Milliseconds formatter

@@ -1,35 +1,40 @@
 <template>
   <div class="board">
     <SplashComponent :splash="splash" @dismiss="onDismiss"/>
-    <!-- 3) <ScoreComponent v-bind="missionScore" :splash="splash" @nextmission="onNextMission" @rank="onRanking"/> -->
-    <!-- 4) add @nextmission onNextMission -->
-    <RankComponent :scores="rankingScore" :splash="splash"/>
+    <ScoreComponent v-bind="missionScore" :splash="splash" @nextmission="onNextMission" @rank="onRanking"/>
+    <RankComponent :scores="rankingScore" :splash="splash" @nextmission="onNextMission"/>
     <div class="mission">Mission {{mission.major}}-{{mission.minor}}</div>
     <div class="rotor-container">
-      <!-- 1) <RotorComponent 
-      v-for="(rotor, i) in rotors" 
-      :key="rotor.id" 
+      <RotorComponent 
+      v-for="(rotor, i) in rotors"
+      :key="rotor.id"
       :rotor="rotor"
-      :style="'left:'+positions[i].x+'px;top:'+positions[i].y+'px;'" 
-      @dial="onDial"/> -->
+      :style="'left:'+positions[i].x+'px;top:'+positions[i].y+'px;'"
+      @dial="onDial"></RotorComponent>
     </div>
     <div class="control-container">
-      <!-- 2) <ControlComponent :steps="steps.length" @resetgame="onReset" ref="controlRef"/> -->
+      <ControlComponent :steps="steps.length" @resetgame="onReset" ref="controlRef"/>
     </div>
   </div>
 </template>
 
 <script>
+import RotorComponent from "./Rotor";
+import ScoreComponent from "./Score";
 import SplashComponent from "./Splash";
 import RankComponent from "./Rank";
+import ControlComponent from "./Control";
 import { tutorialMissions, Mission } from '../models/mission';
-/* use api */
-/* use scoreSummary */
+import * as enigmaApi from "../lib/enigma.api";
+import { scoreSummary } from "../lib/scoreSummary";
 export default {
   name: 'Board',
   components: {
     SplashComponent,
-    RankComponent
+    ScoreComponent,
+    RankComponent,
+    RotorComponent,
+    ControlComponent
   },
   data() {
     return {
@@ -66,6 +71,15 @@ export default {
         }
         /* 3.1) delay 1 sec before start next mission
         or show score if last mission and stop control timer tick */
+        setTimeout(() => {
+          if (this.missions.length === 0) {
+            this.missionScore = scoreSummary(this.level, 5000, this.completed);
+            this.splash = '_score';
+            this.$refs.controlRef.clearTick();
+          } else {
+            this.start(this.missions.shift());
+          }
+        }, 1000);
       }
     },
     splash(val) {
@@ -98,28 +112,45 @@ export default {
         }
       }
     },
+
     onDismiss() {
       this.$refs.controlRef.startTick();
     },
 
     /* 1) onDial() call mission dial, save id to move steps */
+    onDial(id) {
+      this.mission.dial(id);
+      this.steps.push(id);
+    },
     
-    /* 2) onReset() fetch ranking
-    set _rank splash */
+    onReset() {
+      this.steps = [];
+      this.splash = '_reset';
+      this.mission.reset();
+    },
 
+    async onRanking() {
+      this.rankingScore = await enigmaApi.getRanking();
+      this.splash = '_rank';
+    },
     /* 3.2) onNextMission() fetch next level missions, 
     start control timer tick, 
     call start() with first mission */
+    async onNextMission() {
+      this.missions = await enigmaApi.getMission(++this.level);
+      this.$refs.controlRef.startTick();
+      this.start(this.missions.shift());
+    }
   },
   async created() {
-    // let missions = await enigmaApi.getMission(this.level);
-    // if (this.level === 1) {
-    //   missions = missions.slice(2);
-    // } else if (this.level > 1) {
-    //   this.missions = [];
-    // }
-    // this.missions = this.missions.concat(missions);
-    // this.start(this.missions.shift());
+    let missions = await enigmaApi.getMission(this.level);
+    if (this.level === 1) {
+      missions = missions.slice(2);
+    } else if (this.level > 1) {
+      this.missions = [];
+    }
+    this.missions = this.missions.concat(missions);
+    this.start(this.missions.shift());
   }
 }
 </script>
